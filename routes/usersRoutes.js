@@ -1,16 +1,16 @@
 const express = require("express")
-const {usersController} = require("../controllers");
+const { usersController } = require("../controllers");
 const authenticateUser = require("../middlewares/authenticate-user");
 
 const usersRoutes = express.Router();
 
-usersRoutes.route("/users").get([authenticateUser],usersController.getAll)
+usersRoutes.use(authenticateUser);
 
-usersRoutes.route("/users/me")
-	.get([authenticateUser],usersController.getMe)
 
+usersRoutes.route("/users").get(usersController.getAll)
+usersRoutes.route("/users/me").get(usersController.getMe)
 usersRoutes.route("/users/:id")
-	.get([authenticateUser],usersController.getOne)
-	.put([authenticateUser],usersController.updateOne)
+	.get(usersController.getOne)
+	.put(usersController.updateOne)
 
 module.exports = usersRoutes;

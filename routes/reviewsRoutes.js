@@ -5,14 +5,16 @@ const authenticateUser = require("../middlewares/authenticate-user");
 
 const reviewsRoutes = express.Router();
 
+reviewsRoutes.use(authenticateUser);
+
 reviewsRoutes.route("/reviews")
-	.get([authenticateUser],reviewsController.getAll)
-	.post([authenticateUser],reviewsController.createOne)
+	.get(reviewsController.getAll)
+	.post(reviewsController.createOne)
 
 
 reviewsRoutes.route("/reviews/:id")
-	.get([authenticateUser],reviewsController.getOne)
-	.put([authenticateUser],reviewsController.updateOne)
-	.delete([authenticateUser],reviewsController.deleteOne)
+	.get(reviewsController.getOne)
+	.put(reviewsController.updateOne)
+	.delete(reviewsController.deleteOne)
 
 module.exports = reviewsRoutes;
