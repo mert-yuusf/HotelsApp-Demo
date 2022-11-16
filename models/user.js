@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const gravatar = require('gravatar');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
 	firstName: {
@@ -38,6 +39,11 @@ const userSchema = new mongoose.Schema({
 	},
 
 	passwordResetExpire: {
+		type: String,
+		default: null
+	},
+
+	passwordResetToken: {
 		type: String,
 		default: null
 	},
