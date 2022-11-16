@@ -9,15 +9,15 @@ const authenticateUser = asyncWrapper(async (req, res, next) => {
 	if (authHeader && authHeader.startsWith('Bearer')) {
 		const token = authHeader.split(' ')[1];
 		if (token && token !== "null") {
-			const {payload} = jwt.verify(token, process.env.JWT_SECRET);
-			const {userId} = payload;
+			const { payload } = jwt.verify(token, process.env.JWT_SECRET);
+			const { userId } = payload;
 			req.currentUserId = userId;
 			next();
 		} else {
-			throw new BaseError.Bad_Request("Invalid Authentication");
+			throw new BaseError.UnAuthenticated("Invalid Authentication");
 		}
 	} else {
-		throw new BaseError.Bad_Request("Invalid Authentication");
+		throw new BaseError.UnAuthenticated("Invalid Authentication");
 	}
 })
 

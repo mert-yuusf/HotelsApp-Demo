@@ -26,7 +26,14 @@ const ErrorHandlerMiddleware = (err, req, res, next) => {
             statusCode: StatusCodes.BAD_REQUEST
         }
     }
-
+    if (err.name === "Un_Authenticated") {
+        baseError = {
+            name: err.name,
+            message: err.message,
+            status: "fail",
+            statusCode: StatusCodes.UNAUTHORIZED
+        }
+    }
     if (err.name === "TypeError") {
         baseError = {
             name: "TypeError",
@@ -45,7 +52,7 @@ const ErrorHandlerMiddleware = (err, req, res, next) => {
             statusCode: StatusCodes.BAD_REQUEST
         }
     }
-    
+
     return res.status(baseError.statusCode).json(baseError);
 }
 

@@ -1,4 +1,4 @@
-const { Hotel } = require("../models")
+const { Hotel, Room } = require("../models")
 const { StatusCodes } = require("http-status-codes");
 const asyncWrapper = require("../middlewares/async-wrapper");
 
@@ -33,6 +33,10 @@ const hotelsController = {
 	deleteOne: asyncWrapper(async (req, res) => {
 		const { id } = req.params;
 		const hotel = await Hotel.findByIdAndDelete(id);
+
+		// remove all rooms on this hotel removed;
+		await Room.deleteMany({ hotel: id });
+
 		res.status(StatusCodes.OK).json({
 			result: hotel,
 			state: "success"

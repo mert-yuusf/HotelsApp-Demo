@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
 
 	avatar: {
 		type: String,
-		default: gravatar.url(this.email, {s: '100', r: 'x', d: 'retro'}, false)
+		default: gravatar.url(this.email, { s: '100', r: 'x', d: 'retro' }, false)
 	},
 
 	password: {
@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
 		default: "customer"
 	},
 
-}, {timestamps: true}, {toJSON: {virtuals: true}, toObject: {virtuals: true}});
+}, { timestamps: true });
 
 
 // encrypt password before save it to database
@@ -77,9 +77,25 @@ userSchema.methods.generateRestToken = async function () {
 		.digest("hex");
 	// add 10 minutes as expire time
 	this.passwordResetExpire = Date.now() + 10 * 60 * 1000;
-	await this.save({validateBeforeSave: false});
+	await this.save({ validateBeforeSave: false });
 	return this.passwordResetToken;
 };
 
+
+// Virtuals Properties
+userSchema.virtual("reviews", {
+	ref: "Review",
+	foreignField: "user",
+	localField: "id",
+})
+
+
+userSchema.pre(/^findOne/, async function (next) {
+	this.populate({ path: "reviews" });
+	next();
+})
+
+userSchema.set("toJSON", { virtuals: true })
+userSchema.set("toObject", { virtuals: true })
 
 module.exports = mongoose.model("User", userSchema);

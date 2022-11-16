@@ -34,5 +34,6 @@ reviewSchema.pre(/^find/, function (next) {
 	next();
 });
 
-reviewSchema.set("toJSON", { virtuals: true })
+reviewSchema.set("toJSON", { virtuals: true });
+
 module.exports = mongoose.model("Review", reviewSchema);

@@ -1,5 +1,5 @@
-const {Room} = require("../models")
-const {StatusCodes} = require("http-status-codes");
+const { Room } = require("../models")
+const { StatusCodes } = require("http-status-codes");
 const asyncWrapper = require("../middlewares/async-wrapper");
 const Factory = require("./handlerFactory");
 
@@ -13,8 +13,8 @@ const roomsController = {
 	}),
 
 	getOne: asyncWrapper(async (req, res) => {
-		const {id} = req.params;
-		const hotel = await Room.findById(id).populate({path: "hotelId", select: "_id name location"});
+		const { id } = req.params;
+		const hotel = await Room.findById(id)
 		res.status(StatusCodes.OK).json({
 			result: hotel,
 			state: "success"
@@ -22,7 +22,7 @@ const roomsController = {
 	}),
 
 	createOne: asyncWrapper(async (req, res) => {
-		const room = await Room.create({...req.body})
+		const room = await Room.create({ ...req.body })
 		res.status(StatusCodes.CREATED).json({
 			result: room,
 			state: "success"
@@ -31,7 +31,7 @@ const roomsController = {
 
 
 	deleteOne: asyncWrapper(async (req, res) => {
-		const {id} = req.params;
+		const { id } = req.params;
 		const room = await Room.findByIdAndDelete(id);
 		res.status(StatusCodes.OK).json({
 			result: room,
@@ -41,8 +41,8 @@ const roomsController = {
 
 
 	updateOne: asyncWrapper(async (req, res) => {
-		const {id} = req.params;
-		const room = await Room.findByIdAndUpdate(id, {...req.body}, {new: true})
+		const { id } = req.params;
+		const room = await Room.findByIdAndUpdate(id, { ...req.body }, { new: true })
 		res.status(StatusCodes.OK).json({
 			result: room,
 			state: "success"

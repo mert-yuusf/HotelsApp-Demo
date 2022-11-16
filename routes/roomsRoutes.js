@@ -1,18 +1,19 @@
 const express = require("express")
-const {roomsController} = require("../controllers");
+const { roomsController } = require("../controllers");
 const authenticateUser = require("../middlewares/authenticate-user");
 const authorizePermissions = require("../middlewares/authorizer-permission");
 
 const roomsRoutes = express.Router();
 
-roomsRoutes.route("/rooms")
-	.get([authenticateUser],roomsController.getAll)
-	.post([authenticateUser],roomsController.createOne)
+roomsRoutes.use(authenticateUser);
 
+roomsRoutes.route("/rooms")
+	.get(roomsController.getAll)
+	.post(roomsController.createOne)
 
 roomsRoutes.route("/rooms/:id")
-	.get([authenticateUser],roomsController.getOne)
-	.put([authenticateUser],roomsController.updateOne)
-	.delete([authenticateUser],roomsController.deleteOne)
+	.get(roomsController.getOne)
+	.put(roomsController.updateOne)
+	.delete(roomsController.deleteOne)
 
 module.exports = roomsRoutes;
