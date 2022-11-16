@@ -52,42 +52,36 @@ const hotelSchema = new mongoose.Schema({
 			mimetype: String
 		}
 	],
-	// rooms: {
-	// 	type: [mongoose.Schema.Types.ObjectId],
-	// 	ref: "Room",
-	// 	default: []
-	// },
-	// averageRoomPrice: {
-	// 	type: Number,
-	// 	default: 0
-	// },
-	//
-	// roomsCount: {
-	// 	type: Number,
-	// 	default: 0
-	// },
-}, {timestamps: true}, {toJSON: {virtuals: true}, toObject: {virtuals: true}});
+}, { timestamps: true });
 
 
 // Slugify name of hotel
 hotelSchema.pre("save", async function (next) {
-	this.slug = slugify(this.name, {lower: true})
+	this.slug = slugify(this.name, { lower: true })
 	next();
 });
 
 
 
 // virtual properties
-hotelSchema.virtual("reviews",{
-	ref:"Review",
-	foreignField:"hotel",
-	localField:"id",
+hotelSchema.virtual("reviews", {
+	ref: "Review",
+	foreignField: "hotel",
+	localField: "id",
 });
 
-
-hotelSchema.pre(/^findOne/,async function(next){
-	this.populate({path:"reviews"})
-	next();
+hotelSchema.virtual("rooms", {
+	ref: "Room",
+	foreignField: "hotel",
+	localField: "id"
 })
-hotelSchema.set("toJSON",{virtuals:true})
+
+hotelSchema.pre(/^findOne/, async function (next) {
+	this.populate({ path: "reviews" });
+	this.populate({ path: "rooms" });
+	next();
+});
+
+hotelSchema.set("toJSON", { virtuals: true })
+hotelSchema.set("toObject", { virtuals: true })
 module.exports = mongoose.model("Hotel", hotelSchema)
